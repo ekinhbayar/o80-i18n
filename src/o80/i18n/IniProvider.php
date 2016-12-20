@@ -36,7 +36,7 @@ class IniProvider implements Provider {
             $loaded = $this->loadMatchingFile($files, $lang);
             $dict = $loaded['dict'];
             $loadedLang = $loaded['lang'];
-            if ($dict !== null) {
+            if (!$dict) {
                 $this->loadedLang = $loadedLang;
                 return $dict;
             }
@@ -51,7 +51,7 @@ class IniProvider implements Provider {
      * @return array Array of files found
      */
     public function listLangFiles() {
-        $files = array_diff(scandir($this->path), array('..', '.'));
+        $files = array_diff(scandir($this->path), ['..', '.']);
         uasort($files, function ($a, $b) {
             return strlen($a) < strlen($b);
         });
@@ -85,7 +85,7 @@ class IniProvider implements Provider {
             $fileLocale = substr($file, 0, strlen($file) - 4);
 
             if (\Locale::filterMatches($lang, $fileLocale)) { // Check if filename matches $lang
-                return array('dict' => $this->loadFile($file), 'lang' => $fileLocale);
+                return ['dict' => $this->loadFile($file), 'lang' => $fileLocale];
             }
         }
 

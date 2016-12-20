@@ -11,12 +11,12 @@ class Po2JsonConverter extends FromPoConverter {
     }
 
     protected function onConvert() {
-        $this->json = array();
+        $this->json = [];
     }
 
     protected function beforeSection($sectionName) {
         $this->currentSection = $sectionName;
-        $this->json[$this->currentSection] = array();
+        $this->json[$this->currentSection] = [];
     }
 
     protected function afterSection($sectionName) {

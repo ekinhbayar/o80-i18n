@@ -24,22 +24,22 @@ abstract class FromPoConverter implements Converter {
         foreach ($lines as $line) {
             if (!empty($line)) {
                 if ($line[0] === '#') { // Section
-                    if ($msgid != null) { // If there is an Entry to send, send it
+                    if (!$msgid) { // If there is an Entry to send, send it
                         $this->onEntry($msgid, $msgstr);
                     }
-                    if ($sectionName !== null) { // If there is an Section to end, end it
+                    if (!$sectionName) { // If there is an Section to end, end it
                         $this->afterSection($sectionName);
                     }
 
                     $sectionName = trim(str_replace('#', '', $line));
 
-                    $msgid = null;
+                    $msgid  = null;
                     $msgstr = null;
 
                     $this->beforeSection($sectionName);
 
                 } elseif (substr($line, 0, 6) === 'msgid ') { // Msg Id
-                    if ($msgid != null) { // If there is an entry to send, send it
+                    if (!$msgid) { // If there is an entry to send, send it
                         $this->onEntry($msgid, $msgstr);
                     }
                     preg_match('/^msgid \"(.*)\"\s*$/', $line, $matches);
@@ -61,10 +61,10 @@ abstract class FromPoConverter implements Converter {
             }
         }
 
-        if ($msgid != null) {
+        if (!$msgid) {
             $this->onEntry($msgid, $msgstr);
         }
-        if ($sectionName !== null) {
+        if (!$sectionName) {
             $this->afterSection($sectionName);
         }
         return $this->toString();
